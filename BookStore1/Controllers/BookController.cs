@@ -111,22 +111,20 @@ namespace BookStore1.Controllers
         // POST: BookController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(BookAuthorViewModel model)
+        public ActionResult Edit(int id, BookAuthorViewModel model)
         {
             try
             {
+                Book book = bookRepository.Find(id);
                 string fileName = UploadFile(model.File, model.ImageUrl);
 
                 var author = authorRepository.Find(model.AuthorId);
 
-                Book book = new Book
-                {
-                    Id = model.BookId,
-                    Title = model.Title,
-                    Description = model.Description,
-                    Author = author,
-                    ImageUrl = fileName
-                };
+                //Id = model.BookId,
+                book.Title = model.Title;
+                book.Description = model.Description;
+                book.Author = author;
+                book.ImageUrl = fileName;
 
                 bookRepository.Update(model.BookId, book);
                 return RedirectToAction(nameof(Index));
